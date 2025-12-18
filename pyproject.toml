@@ -11,5 +11,7 @@ dependencies = [
     "alembic",
     "sqlmodel",
     "pydantic",
-    "psycopg"
+    "pydantic-settings",
+    "asyncpg",
+    "python-dotenv",
 ]
