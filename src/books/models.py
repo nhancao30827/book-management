@@ -10,7 +10,7 @@ class Book(SQLModel, table=True):
         sa_column=Column(
             pg.UUID(as_uuid=True),
             primary_key=True,
-            default=uuid.uuid4,
+            default=uuid.uuid4
         )
     )
     
