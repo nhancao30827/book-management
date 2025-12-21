@@ -1,4 +1,5 @@
-from sqlmodel import SQLModel, Field, Column
+from sqlalchemy import Column
+from sqlmodel import SQLModel, Field
 import sqlalchemy.dialects.postgresql as pg
 from datetime import datetime, date
 import uuid
