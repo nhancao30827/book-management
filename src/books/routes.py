@@ -4,9 +4,11 @@ from src.books.schemas import BookCreate, BookUpdate, BookRead
 from src.books.service import BookService
 from src.db.database import get_session
 import uuid
+from src.auth.dependencies import AccessTokenBearer
 
 
-book_router = APIRouter()
+
+book_router = APIRouter(dependencies=[Depends(AccessTokenBearer())])
 book_service = BookService()
 
 @book_router.get("", response_model=list[BookRead])

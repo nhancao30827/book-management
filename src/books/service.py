@@ -3,6 +3,7 @@ from sqlmodel import select, desc
 from fastapi import HTTPException, status
 from src.books.models import Book
 from src.books.schemas import BookCreate, BookUpdate
+from src.db.redis import add_jti_to_blocklist
 import uuid
 
 class BookService:
@@ -55,3 +56,15 @@ class BookService:
 
         await session.delete(book)
         await session.commit()
+
+    async def logout(self, session: AsyncSession, token_data: dict[str, Any]):
+        jti = token_data['jti']
+
+        await add_jti_to_blocklist(jti)
+
+        return JSONResponse(
+        content={
+            "message":"Logged Out Successfully"
+        },
+        status_code=status.HTTP_200_OK
+    )

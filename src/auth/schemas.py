@@ -6,7 +6,7 @@ import uuid
 class UserBase(BaseModel):
     uid: uuid.UUID
     username: str
-    email: EmailStr
+    email: str
     first_name: str
     last_name: str
     is_verified: bool = False
@@ -20,7 +20,12 @@ class UserRead(UserBase):
 # Schema for creating
 class UserCreateModel(BaseModel):
     username: str
-    email: EmailStr
+    email: str
     first_name: str
     last_name: str
     password: str = Field(..., min_length=8, max_length=100)
+
+# Schema for logging in
+class UserLoginModel(BaseModel):
+    email: str
+    password: str
