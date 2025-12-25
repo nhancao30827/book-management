@@ -56,15 +56,4 @@ class BookService:
 
         await session.delete(book)
         await session.commit()
-
-    async def logout(self, session: AsyncSession, token_data: dict[str, Any]):
-        jti = token_data['jti']
-
-        await add_jti_to_blocklist(jti)
-
-        return JSONResponse(
-        content={
-            "message":"Logged Out Successfully"
-        },
-        status_code=status.HTTP_200_OK
-    )
+        return status.HTTP_200_OK

@@ -5,10 +5,11 @@ from src.db.database import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
-from src.auth.dependencies import RefreshTokenBearer
+from src.auth.dependencies import RefreshTokenBearer, AccessTokenBearer, RoleChecker, get_current_user
 
 auth_router = APIRouter()
 user_service = UserService()
+role_checker = RoleChecker(["admin"])
 
 @auth_router.post("/signup", response_model=UserBase, status_code=status.HTTP_201_CREATED)
 async def create_user_account(user_data: UserCreateModel, session: AsyncSession = Depends(get_session)):
@@ -39,6 +40,7 @@ async def login_users(login_data: UserLoginModel, session: AsyncSession = Depend
         content={
             "access_token": result["access_token"],
             "token_type": "bearer",
+            "role": result["role"],
         }
     )
 
@@ -64,7 +66,10 @@ async def get_new_access_token(token_details: dict = Depends(RefreshTokenBearer(
             detail=str(e)
         )
 
-@auth_router.get('/logout')
+@auth_router.post('/logout')
 async def revoke_token(token_details:dict=Depends(AccessTokenBearer())):
-    await user_service.logout(token_details)
-   
+    return await user_service.logout(token_details)
+
+@auth_router.get("/me")
+async def get_current_user(user=Depends(get_current_user), _:bool = Depends(role_checker)):
+    return user
