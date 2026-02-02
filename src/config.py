@@ -13,3 +13,5 @@ class Settings(BaseSettings):
     )
 
 Config = Settings()
+
+print(f"DEBUG_KEY_TAI_CONFIG: '{Config.JWT_SECRET}'")
